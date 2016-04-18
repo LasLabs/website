@@ -1,10 +1,11 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
-Website logo
+Website Logo
 ============
 
-Load a logo image to be used on website only. This allows to use an internal company logo (for reports) and a different website logo.
+Load a logo image to be used on website only. This allows to use an
+internal company logo (for reports) and a different website logo.
 
 
 Configuration
@@ -12,9 +13,10 @@ Configuration
 
 To configure this module, you need to:
 
-* go to your company and load a logo image in the website logo field
+* Go to your company and load a logo image in the website logo field
 
-Note that, in case of anonymous visitors, the company associated to admin user will be used
+Note that, in case of anonymous visitors, the company associated to
+admin user will be used
 
 
 Credits
@@ -24,6 +26,7 @@ Contributors
 ------------
 
 * Lorenzo Battistini <lorenzo.battistini@agilebg.com>
+* Dave Lasley <dave@laslabs.com>
 
 Maintainer
 ----------
