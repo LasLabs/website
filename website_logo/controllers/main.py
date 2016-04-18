@@ -64,4 +64,4 @@ class Website(http.Controller):
                         return response
             except Exception:
                 return http.send_file(placeholder(imgname))
-        return http.send_file(placeholder(imgname))
+        return self.company_logo(dbname=dbname, **kw)
