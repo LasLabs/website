@@ -17,8 +17,6 @@
         'views/company_view.xml',
         'views/website_templates.xml',
     ],
-    'qweb': [
-    ],
     'installable': True,
     'auto_install': False,
 }

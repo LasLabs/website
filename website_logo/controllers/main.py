@@ -13,7 +13,7 @@ from cStringIO import StringIO
 db_monodb = http.db_monodb
 
 
-class website_logo(Binary):
+class WebsiteLogo(Binary):
 
     @http.route([
         '/website_logo.png',
@@ -49,4 +49,4 @@ class website_logo(Binary):
                         return response
             except Exception:
                 return http.send_file(placeholder(imgname))
-        return super(website_logo, self).company_logo(dbname=dbname, **kw)
+        return self.company_logo(dbname=dbname, **kw)
