@@ -36,7 +36,7 @@ class Website(http.Controller):
         '/website_logo.png',
     ], type='http', auth="none", cors="*")
     def website_logo(self, dbname=None, **kw):
-        imgname = 'website_nologo.png'
+        imgname = 'website_logo.png'
         placeholder = functools.partial(
             get_module_resource,
             'website_logo', 'static', 'src', 'img')
@@ -64,4 +64,4 @@ class Website(http.Controller):
                         return response
             except Exception:
                 return http.send_file(placeholder(imgname))
-        return self.company_logo(dbname=dbname, **kw)
+        return http.send_file(placeholder(imgname))

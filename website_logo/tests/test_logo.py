@@ -3,68 +3,88 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from openerp.tests import HttpCase
-from openerp.addons.website_logo.controllers.main import WebsiteLogo
+from openerp.addons.website_logo.controllers.main import Website
 import mock
 
 
 imp_cont = 'openerp.addons.website_logo.controllers.main'
 imp_req = '%s.request' % imp_cont
-mod_imp = '%s.Binary' % imp_cont
+
+
+class StopTestException(Exception):
+    pass
 
 
 class TestLogo(HttpCase):
 
-    @mock.patch(mod_imp)
-    def setUp(self, mk):
+    def setUp(self):
         super(TestLogo, self).setUp()
         self.model_obj = self.env['res.company']
-        self.cont_obj = WebsiteLogo()
+        self.cont_obj = Website()
         self.rec_id = self.env.ref('base.main_company')
         self.image_val = 'Test'.encode('base64')
-        self.mock = mk
 
-    @mock.patch('%s.http' % imp_cont)
-    @mock.patch('%s.StringIO' % imp_cont)
-    @mock.patch(imp_req)
-    def test_sql_query_and_fetch(self, imp_mk, str_mk, http_mk):
-        """ SQL query is executed and fetched """
-        with mock.patch('%s.openerp' % imp_cont) as mk:
-            cr_mk = mk.modules.registry.Registry().cursor().__enter__()
-            self.cont_obj.website_logo()
-            args = cr_mk.execute.call_args
-            self.assertIn(
-                'SELECT c.website_logo', args[0][0],
-                'Website logo select not in query call',
-            )
+    def test_image_logo_get_domain(self):
+        """ Test logo get w/ domain """
+        mk = mock.MagicMock()
+        mk.execute.side_effect = StopTestException
+        expect = 'Test'
+        with self.assertRaises(StopTestException):
+            self.cont_obj._image_logo_get(mk, domain=expect)
+        args = mk.execute.call_args
+        self.assertIn(
+            'SELECT logo, write_date', args[0][0],
+            'Website logo select not in query call. Got %s' % args[0][0],
+        )
+        self.assertEqual(
+            (expect, ), args[0][1],
+            'Domain not in query call. Expect %s, Got %s' % (
+                (expect, ), args[0][1],
+            ),
+        )
 
-    @mock.patch('%s.http' % imp_cont)
+    def test_image_logo_get_no_domain(self):
+        """ Test logo get w/out domain """
+        mk = mock.MagicMock()
+        mk.execute.side_effect = StopTestException
+        with self.assertRaises(StopTestException):
+            self.cont_obj._image_logo_get(mk)
+        args = mk.execute.call_args
+        self.assertIn(
+            'SELECT logo, write_date', args[0][0],
+            'Website logo select not in query call.',
+        )
+        self.assertNotIn(
+            'WHERE name =', args[0][0],
+            'Name condition in query w/ no domain.',
+        )
+
+    def test_image_logo_fetch(self):
+        """ Query result should be fetched """
+        mk = mock.MagicMock()
+        mk.fetchone.side_effect = StopTestException
+        with self.assertRaises(StopTestException):
+            self.cont_obj._image_logo_get(mk)
+
     @mock.patch('%s.StringIO' % imp_cont)
-    @mock.patch(imp_req)
-    def test_packs_and_returns_file(self, imp_mk, str_mk, http_mk):
-        """ Result of query is packed into StringIO then returned as file """
-        with mock.patch('%s.openerp' % imp_cont) as mk:
-            cr_mk = mk.modules.registry.Registry().cursor().__enter__()
-            cr_mk.fetchone.return_value = [self.image_val, 123]
-            res = self.cont_obj.website_logo()
-            str_mk.assert_called_once_with(
-                str(self.image_val).decode('base64')
-            )
-            http_mk.send_file.assert_called_once_with(
-                str_mk(), filename='logo.png', mtime=123,
-            )
-            self.assertEqual(
-                http_mk.send_file(), res,
-                'Did not return image',
-            )
+    def test_image_logo_returns_fetch_io(self, str_mk):
+        """ Successful query should return StringIO image """
+        mk = mock.MagicMock()
+        expect1, expect2 = self.image_val, 'Test2'
+        mk.fetchone.return_value = [expect1, expect2]
+        res = self.cont_obj._image_logo_get(mk)
+        str_mk.assert_called_once_with(str(expect1).decode('base64'))
+        self.assertEqual((str_mk(), expect2), res)
 
     @mock.patch('%s.functools' % imp_cont)
     @mock.patch('%s.http' % imp_cont)
     @mock.patch('%s.StringIO' % imp_cont)
     @mock.patch(imp_req)
     def test_default_on_exception(self, imp_mk, str_mk, http_mk, func_mk):
+        http_mk.send_file.side_effect = StopTestException
         with mock.patch('%s.openerp' % imp_cont) as mk:
             cr_mk = mk.modules.registry.Registry().cursor().__enter__()
-            cr_mk.execute.side_effect = StopIteration
-            res = self.cont_obj.website_logo()
+            cr_mk.execute.side_effect = StopTestException
+            with self.assertRaises(StopTestException):
+                self.cont_obj.website_logo()
             http_mk.send_file.assert_called_once(func_mk())
-            self.assertEqual(res, http_mk.send_file())

@@ -8,9 +8,9 @@
     'version': '9.0.1.0.0',
     'category': 'Website',
     'author': "Agile Business Group, "
-          "Antiun Ingeniería S.L., "
-          "LasLabs, "
-          "Odoo Community Association (OCA)",
+              "Antiun Ingeniería S.L., "
+              "LasLabs, "
+              "Odoo Community Association (OCA)",
     'website': 'http://www.agilebg.com',
     'license': 'AGPL-3',
     'depends': [
