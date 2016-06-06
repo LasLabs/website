@@ -18,6 +18,7 @@ Available addons
 addon | version | summary
 --- | --- | ---
 [website_blog_mgmt](website_blog_mgmt/) | 9.0.1.0.0 | Website blog Management
+[website_form_recaptcha](website_form_recaptcha) | 9.0.1.0.0 | Adds a Google ReCaptcha widget for website form
 
 Unported addons
 ---------------
