@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2016 LasLabs Inc.
+    @license AGPL-3 or later (http://www.gnu.org/licenses/agpl.html).
+-->
+
+<odoo>
+    <template id="field_autocomplete_demo" name="Field Autocomplete Demo" inherit_id="website_field_autocomplete.field_autocomplete_demo">
+        <xpath expr="//div[@class='row']" position="after">
+            <div class="row">
+                <h1>Partner Autocomplete Related:</h1>
+                <div class="row">
+                    <label for="name">Name</label>
+                    <input type="text"
+                           name="name"
+                           class="js_website_autocomplete"
+                           data-query-field="name"
+                           data-relate-group="res_partner"
+                           data-model="res.partner"
+                           />
+                </div>
+                <div class="row">
+                    <label for="phone">Phone</label>
+                    <input type="text"
+                           name="phone"
+                           class="js_website_autocomplete"
+                           data-query-field="phone"
+                           data-relate-group="res_partner"
+                           data-model="res.partner"
+                           />
+                </div>
+                <div class="row">
+                    <label for="name">Street</label>
+                    <input type="text"
+                           name="company"
+                           data-query-field="street"
+                           data-relate-group="res_partner"
+                           />
+                </div>
+                <div class="row">
+                    <label for="name">Street2</label>
+                    <input type="text"
+                           name="street2"
+                           data-relate-group="res_partner"
+                           />
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
