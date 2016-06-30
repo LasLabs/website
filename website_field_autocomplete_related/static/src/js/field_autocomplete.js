@@ -36,8 +36,16 @@ odoo.define('website_field_autocomplete_related.field_autocomplete', function(re
       }
       var record = this.data[ui.item.value];
       this.$related.each(function(){
-        var fieldName = $(this).data('query-field') || this.name;
-        $(this).val(record[fieldName] || '');
+        var $this = $(this);
+        var recvField = $this.data('query-field') || 'name';
+        if (!$this.data('relate-send')) {
+          recvField = $this.data('recv-field') || recvField;
+        }
+        if (['checkbox', 'radio'].indexOf(this.type) != -1) {
+          $(this).attr('checked', record[recvField]);
+        } else {
+          $(this).val(record[recvField] || '');
+        }
       });
     },
     
@@ -48,11 +56,15 @@ odoo.define('website_field_autocomplete_related.field_autocomplete', function(re
         this.valueField = 'id';
         this.fields.push('id');
       }
-      var relationGroup = this.$target.data('relate-group');
+      var relationGroup = this.$target.data('relate-send') || this.$target.data('relate-recv');
       if (relationGroup) {
-        this.$related = $('*[data-relate-group="' + relationGroup + '"]');
+        this.$related = $('*[data-relate-recv="' + relationGroup + '"]');
         this.$related.each(function() {
-          self.fields.push($(this).data('query-field') || this.name);
+          var $this = $(this);
+          var field = $this.data('recv-field') || $this.data('query-field');
+          if (field){
+            self.fields.push(field);
+          } 
         });
         this.$target.on('autocompleteselect', function(event, ui) {
           self.autocompleteselect(event, ui);

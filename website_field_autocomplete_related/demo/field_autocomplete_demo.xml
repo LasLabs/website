@@ -16,8 +16,20 @@
                            name="name"
                            class="js_website_autocomplete"
                            data-query-field="name"
-                           data-relate-group="res_partner"
+                           data-relate-recv="res_partner"
                            data-model="res.partner"
+                           />
+                </div>
+                <div class="row">
+                    <label for="company">Company</label>
+                    <input type="text"
+                           name="company"
+                           class="js_website_autocomplete"
+                           data-query-field="name"
+                           data-recv-field="company_id.name"
+                           data-relate-recv="res_partner"
+                           data-relate-send="_"
+                           data-model="res.company"
                            />
                 </div>
                 <div class="row">
@@ -26,7 +38,7 @@
                            name="phone"
                            class="js_website_autocomplete"
                            data-query-field="phone"
-                           data-relate-group="res_partner"
+                           data-relate-recv="res_partner"
                            data-model="res.partner"
                            />
                 </div>
@@ -35,14 +47,14 @@
                     <input type="text"
                            name="company"
                            data-query-field="street"
-                           data-relate-group="res_partner"
+                           data-relate-recv="res_partner"
                            />
                 </div>
                 <div class="row">
                     <label for="name">Street2</label>
                     <input type="text"
                            name="street2"
-                           data-relate-group="res_partner"
+                           data-relate-recv="res_partner"
                            />
                 </div>
             </div>
