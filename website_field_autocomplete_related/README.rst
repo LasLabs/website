@@ -16,12 +16,17 @@ To use this module, you would follow the instructions provided in
 ``website_field_autocomplete``.
 
 The only difference is that you would create multiple auto complete
-fields, then utilize the ``data-relate-group`` attribute to link the
+fields, then utilize the ``data-relate-recv`` attribute to link the
 fields' data & searches together.
 
 If you would like to activate the relation on a non-autocomplete element,
 you also need to add the ``data-query-field`` attribute or match the name of
 the element to the name of the column.
+
+If you would like to send data to a different Relation Group, you can use the
+``data-relate-send`` attribute. If you utilize this attribute, you will likely
+also need ``data-recv-field`` which will select the field that should be
+received when it is updated via its receive group.
 
 Following is an example:
 
@@ -32,31 +37,53 @@ Following is an example:
            name="name"
            class="js_website_autocomplete"
            data-query-field="name"
-           data-relate-group="res_partner"
+           data-relate-recv="res_partner"
            data-model="res.partner"
            />
-    
+
+    <label for="company">Company</label>
+    <input type="text"
+           name="company"
+           class="js_website_autocomplete"
+           data-query-field="name"
+           data-relate-recv="res_partner"
+           data-relate-send="_"
+           data-model="res.company"
+           />
+
     <label for="name">Phone</label>
     <input type="text"
            name="phone"
            class="js_website_autocomplete"
            data-query-field="phone"
-           data-relate-group="res_partner"
+           data-relate-recv="res_partner"
            data-model="res.partner"
-           />
-
-    <label for="name">Company</label>
-    <input type="text"
-           name="company"
-           data-query-field="street"
-           data-relate-group="res_partner"
            />
 
     <label for="name">Street</label>
     <input type="text"
-           name="street2"
-           data-relate-group="res_partner"
+           name="company"
+           data-query-field="street"
+           data-relate-recv="res_partner"
            />
+
+    <label for="name">Street 2</label>
+    <input type="text"
+           name="street2"
+           data-relate-recv="res_partner"
+           />
+
+Following is a breakdown of the attributes and functions provided:
+
++--------------------+-----------------------------------------------------+---------------+----------+
+|  Attribute         |  Description                                        |  Default      | Required |
++====================+=====================================================+===============+==========+
+| data-relate-recv   | Receive data updated from fields of this group      |               | False    |
++--------------------+-----------------------------------------------------+---------------+----------+
+| data-relate-send   | Send data to fields with this group name            | relate-recv   | False    |
++--------------------+-----------------------------------------------------+---------------+----------+
+| data-recv-field    | Column name to receive data on (from res model)     |  query-field  | False    |
++--------------------+-----------------------------------------------------+---------------+----------+
 
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
