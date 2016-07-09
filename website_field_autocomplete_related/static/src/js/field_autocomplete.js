@@ -37,10 +37,8 @@ odoo.define('website_field_autocomplete_related.field_autocomplete', function(re
       var record = this.data[ui.item.value];
       this.$related.each(function(){
         var $this = $(this);
-        var recvField = $this.data('query-field') || 'name';
-        if (!$this.data('relate-send')) {
-          recvField = $this.data('recv-field') || recvField;
-        }
+        var recvField = $this.data('recv-field') || $this.data('query-field') || 'name';
+        debugger;
         if (['checkbox', 'radio'].indexOf(this.type) != -1) {
           $(this).attr('checked', record[recvField]);
         } else {
@@ -58,7 +56,8 @@ odoo.define('website_field_autocomplete_related.field_autocomplete', function(re
       }
       var relationGroup = this.$target.data('relate-send') || this.$target.data('relate-recv');
       if (relationGroup) {
-        this.$related = $('*[data-relate-recv="' + relationGroup + '"]');
+        this.$related = $('*[data-relate-recv="' + relationGroup + '"]')
+          .add(this.$target);
         this.$related.each(function() {
           var $this = $(this);
           var field = $this.data('recv-field') || $this.data('query-field');
