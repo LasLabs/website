@@ -35,9 +35,12 @@ class Website(Website):
         Returns:
             Dict of record dicts, keyed by ID
         """
+        res = {}
         if limit:
             limit = int(limit)
-        res = request.env[model].search_read(
-            domain, fields, limit=limit
-        )
-        return {r['id']: r for r in res}
+        self.record_ids = request.env[model].search(domain, limit=limit)
+        for rec_id in self.record_ids:
+            res[rec_id.id] = {
+                k: getattr(rec_id, k, None) for k in fields
+            }
+        return res
